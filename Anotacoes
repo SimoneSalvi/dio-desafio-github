@@ -1,1 +1,350 @@
-Anotações Cursos:
+Anotações Curso Java - Datas
+
+Não esquecer de importar:
+java.util.Date
+---------------------------------------------------------
+// Construtores:
+-------------------------------------------------------
+// Não é recomendável o uso, marcados como @Depreciated:
+
+Date(int year, int month, int date)
+
+Date(int year, int month, int date, int hrs, int min)
+
+Date(int year, int month, int date, int hrs, int min, int sec)
+
+Date(String s)
+===========================================================
+//Focar o uso nos construtores:
+---------------------------------------------------------
+Date() =>padrão: vai alocar um objeto na classe Date e o 
+	inicializará com o milissegundo mais próximo do período
+	da sua execução.
+	
+	public class Exemplo{
+		public static void main(String[] args){
+			
+			Date novaData = new Date();
+			System.out.println(novaData);
+			//retorna: Thu Jul 08 09:55:08 BRT 2019
+			
+		}
+	}
+-----------------------------------------------------------
+Date(long date)
+   -Diferente do construtor anterior, esse construtor espera
+   que você passe os milissegundos com base padrão de tempo
+   (epoch) que usa como referência 
+   1 de janeiro de 1970 00:00:00.
+   -O que é Epoch?
+   "O epoch timestamp é um padrão largamente aceito 
+   para representar uma data como um inteiro 32-bits
+   a partir do início do Unix Epoch..."
+   
+   Ex:
+   Date(long date)
+   
+   Vamos testar com base no System.currentTimeMillis()
+   
+   Esse método estático vai nos retornar o milissegundo 
+   mais próximo de sua execução com base no 
+   Sistema Operacional.
+   
+   public class Exemplo{
+	public static void main(String[] args){
+		Long currentTimeMillis = System.currentTimeMillis();
+		System.out.println(currentTimeMillis);
+		
+		Date novaData = new Date(currentTimeMillis);
+		System.out.println(novaData);
+
+------------------------------------------------------		
+------------------------------------------------------
+Outros métodos úteis:
+after(Date)    boolean    checa se o objeto Data de ref é posterior ao comparado
+before(Date)   boolean     checa se o objeto Data de ref é anterior ao comparado
+compareTo(Date)  int       compara dois objetos Data
+equalsTo(Date)   boolean    checa se os objetos são iguais
+getTime()       long       retorna a data em milissegundos
+setTime()       void       define uma data com base em milissegundos
+from(Instante)   static Date    defne uma data com base em um Instante
+toInstant()      Instant      retorna um Instant com base em um Date
+
+----------------------------------------------------------------	
+----------------------------------------------------------------
+After e Before
+o construtor do Date recebe um Long e converte para date
+Definindo datas no passado e futuro:
+
+	Date dataNoPassado = new Date(colocar em time millis L);
+	
+	Date dataNoFuturo = new Date(colocar em time millies L);
+	
+	boolean isAfter = dataNoPassado.after(dataNoFuturo);
+	System.out.println(isAfter);
+	//false
+	
+	boolean isBefore = dataNoPassado.before(dataNoFuturo);
+   	System.out.println(isBefore);
+	//true
+	
+----------------------------------------------------------
+compareTo e equals
+	comparação de datas iguais:
+	boolean isEquals = dataNoFuturo.equals(mesmaDataNoFuturo);
+	System.out.println(isEquals);
+	//true
+	
+	comparando uma data com outra:
+	int compareCase1 = dataNoPassado.compareTo(dataNoFuturo);
+	System.out.println(compareCase1); //-1
+	
+	int compareCase2 = dataNoFuturo.compareTo(dataNoPassado); 
+	System.out.println(compareCase2); //1
+	
+	int compareCase3 = dataNoFuturo.compareTo(mesmaDataNoFuturo);
+	System.out.println(compareCase3); //0
+	
+--------------------------------------------------
+Classe Instant:
+	-Surgiu na JDK 1.8;
+	-Imutável e Thread safe;
+	-Modela um ponto instantâneo de uma linha do tempo;
+	-Indicado para gravar marcações temporais em eventos da sua aplicação.
+
+	Importar:
+	java.time.Instant;
+	java.util.Date;
+	
+	public static void main(String[] args){
+		Date dataInicio = new Date(colocar em time millis L);
+		System.out.println(dataInicio);
+		
+		Instant instant = dataInicio.toInstant();
+		System.out.println(instant);
+	}
+========================================================
+========================================================
+========================================================
+Calendar
+
+-foi depreciated o construtor Date(int year, int month, int date);
+- é uma classe abstrata que provê métodos
+para converter data entre um instante específico.
+-possui alguns campos específicos para manipulação como
+MONTH, YEAR, HOUR etc.
+
+	Importar:
+	java.util.Calendar;
+	
+	public static void main(String[] args) {
+		Calendar agora = Calendar.getInstance();
+		System.out.println(agora);
+	}
+	
+Exemplo:
+	public static void main (String[] args){
+		Calendar agora = Calendar.getInstance();
+		System.out.println("A data corrent é: " + agora.getTime());
+		
+		agora.add(Calendar.DATE, mount: -15);
+		System.out.println("15 dias atrás: " + agora.getTime());
+		
+		agora.add(Calendar.MOUNTH, amount4);
+		System.out.println("4 meses depois: " + agora.getTime());
+		
+		agora.add(Calendar.YEAR, amount:2);
+		System.out.println("2 anos depois: " + agora.getTime());
+		
+-------------------------------------------------------
+Imprimir datas e horas:
+
+	Calendar agora = Calendar.getInstance();
+	
+	System.out.printf("%tc\n", agora);
+	//qui jul 08 13:43:14 BRT 2021
+	
+	System.out.printf("%tF\n", agora);
+	//2021-07-08
+	
+	System.out.printf("%tD\n", agora);
+	//07/08/21
+	
+	System.out.printf("%tr\n", agora);
+	//01:46:31 PM
+	
+	System.out.printf("%tT\n", agora);
+	//13:47:43
+	
+---------------------------------------------------------
+Exercício:
+Um cliente tem 10 dias para pagar uma fatura após
+sua data de vencimento sem que os juros sejam cobrados.
+Caso essa data caia em um sábado ou domingo, o
+cliente pode pagar na segunda-feira seguinte.
+Crie uma estrutura que receba uma data de vencimentoe calcule 
+quantos dias ele tem para pagar. 
+
+=======================================================
+
+java.text.DateFormat
+
+	formatar e parsear a saída das datas:
+	-DateFormat
+	-SimpleDateFormat: traz uma grande facilidade que é definir
+	um padrão de formatação para a saída de data que você deseja.
+
+-----------------	
+Exemplo de formatação de data com DateFormat:
+
+import java.text.DateFormat;
+import java.util.Date;
+
+public class Exemplo{
+	public static void main(String[] args){
+	
+		Date agora = new Date();
+		
+		String dateToStr = DateFormat.getInstance().format(agora);
+		
+		System.out.println(dateToStr);
+		// 14/07/19 22:40
+		
+		dateToStr = DateFormat.getDateTimeInstance(DateFormat.LONG,DateFormat.SHORT).format(agora);
+		
+		System.out.println(dateToStr);
+		//14 de Julho de 2019 22:40
+	}
+}
+
+-------------------
+Exemplo de formatação de data com SimpleDateFormat:
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Exemplo{
+	public static void main(String[] args){
+	
+		Date agora = new Date();
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		
+		String dataFormatada = formatter.format(agora);
+		
+		System.out.println(dataFormatada);
+		// 14/07/2019
+	}
+}	
+
+---------------------
+Exercício:
+Converta a data atual no formato DD/MM/YYYY HH:MM:SS:MMM=> olhar documentação, maiúsculas ou minúsculas
+	dd/MM/yyyy HH:mm:ss:SS
+
+
+https://docs.oracle.com/javase/8/docs/api/java/text/DateFormat.html
+	
+=======================================================
+
+Datas no Java 8+
+
+a grande melhoria está no pacote java.time que foi herdado
+do projeto Joda Time.
+
+https://www.joda.org/joda-time/	
+		
+Nele, destacam-se três classes:
+-LocalDate;
+-LocalTime;
+-LocalDateTime.
+-----------------------------
+LocalDate => trabalha exclusivamente com data
+			Classe imutável para representar uma data	
+			seu formato padrão é yyyy-MM-dd
+			
+Exemplo como utilizar o LocalDate:
+
+import java.time.LocalDate;
+public class Exemplo{
+	public static void main(String[] args){
+		LocalDate hoje = LocalDate.now();
+		System.out.println(hoje);
+		//2019-07-14
+	}
+}
+
+Exemplo de como manipular LocalDate
+
+import java.time.LocalDate;
+public class Exemplo{
+	public static void main(String[] args){
+		LocalDate hoje = LocalDate.now();
+		LocalDate ontem = hoje.minusDays(1);
+		System.out.println(hoje);
+		//2019-07-14
+		
+		System.out.println(ontem);
+		//2019-07-13
+	}
+}
+---------------------------------
+LocalTime => 
+	-é uma classe imutável que representa um padrão	de 
+	horas-minuto-segundo.
+	-pode ser representado até o nível de nanossegundos. 
+	Exemplo: 12:22:10:123212345
+	-sua utilização é similar ao LocalDate.
+	
+Exemplo de utilização LocalTime
+
+import java.time.LocalTime;
+public class Exemplo{
+		public static void main(String[] args) {
+			LocalTime agora = LocalTime.now();
+			System.out.println(agora);
+			// 23:53:58.421
+		}
+}
+
+Exemplo de como manipular LocalTime:
+
+import java.time.LocalTime;
+puclic class Exemplo{
+	public static void main(String[] args){
+	LocalTime agora = LocalTime.now();
+	System.out.println(agora);
+	//23:53:58:421
+	LocalTime maisUmaHora = agora.plusHours(1);
+	System.out.println(maisUmaHora);
+	//00:53:37:421
+	}
+}
+----------------------------------------
+
+LocalDateTime=>
+	-funciona como uma espécie de junção entre o 
+	LocalDate e o LocalTime.
+	- também é uma classe imutável e você consegue
+	trabalhar com dia e hora de uma só vez.
+	-manipula a data e a hora com precisão de nanossegundos.
+	2nd October 2007 at 13:45.30.12345679
+	
+Exemplo: como manipular o LocalDateTime:
+
+import java.time.LocalDateTime;
+public class Exemplo{
+	public static void main(String[] args) {
+	LocalDateTime agora = LocalDateTime.now();
+	
+	System.out.println(agora);
+	//2019-07-17T01:28.076
+	
+	LocalDateTime futuro = agora.plusHours(1).plusDays(2).plusSeconds(12);
+	System.out.println(futuro);
+	//2019-07-17T01:02:28.076
+}
+}
+
+Exercício: Adicione 4 anos, 6 meses e 13 horas ao
+momento 15/05/2010 10:00:00.
